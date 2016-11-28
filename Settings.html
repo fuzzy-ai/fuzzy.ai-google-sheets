@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <script>
+      // Prevent forms from submitting.
+      function preventFormSubmit() {
+        var forms = document.querySelectorAll('form');
+        for (var i = 0; i < forms.length; i++) {
+          forms[i].addEventListener('submit', function(event) {
+            event.preventDefault();
+          });
+        }
+      }
+      window.addEventListener('load', preventFormSubmit);
+
+      function handleFormSubmit(formObject) {
+        google.script.run.withSuccessHandler(closeModal).saveSettings(formObject);
+      }
+      function closeModal() {
+        google.script.host.close();
+      }
+    </script>
+  </head>
+  <body>
+    <form id="settingsForm" onsubmit="handleFormSubmit(this)">
+      <p>This function requires an account at <a href="https://fuzzy.ai/">Fuzzy.ai</a>.</p>
+      <div class="block form-group">
+        <label for="apiKey">Fuzzy.ai API Key</label>
+        <input name="apiKey" id="apiKey" type="text" value="<?= apiKey ?>" style="width: 100%;" />
+        <small>You can get this from your dashboard at <a href="https://fuzzy.ai/">https://fuzzy.ai/</a>.</small>
+      </div>
+      <div class="block form-group">
+        <label for="agentID">Agent ID</label>
+        <input name="agentID" id="agentID" type="text" value="<?= agentID ?>" style="width: 100%;" />
+        <small>Once you've <a href="https://fuzzy.ai/agents/new">created your agent</a>, copy the Agent ID to this value.</small>
+      </div>
+      <div class="block form-group">
+        <button type="submit" class="action">Save settings</button>
+      </div>
+    </form>
+  </body>
+</html>
