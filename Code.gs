@@ -1,4 +1,11 @@
-function FUZZIFY(input) {
+/**
+ * Passes inputs to https://fuzzy.ai
+ *
+ * @param {string} input The Fuzzy.ai Agent input name
+ * @param {number} value The value to pass.
+ * @customfunction
+ */
+function FUZZYAI(input) {
   var inputs = {};
 
   var docProperties = PropertiesService.getDocumentProperties();
@@ -6,7 +13,7 @@ function FUZZIFY(input) {
   var apiKey = docProperties.getProperty('FUZZYAI_API_KEY');
   var agentID = docProperties.getProperty('FUZZYAI_AGENT_ID');
 
-  if (apiKey == "" || agentID == "") {
+  if (!apiKey || apiKey == "" || !agentID || agentID == "") {
     return "Settings required. See Fuzzy.ai > Settings";
   }
 
@@ -39,10 +46,24 @@ function FUZZIFY(input) {
   return results;
 }
 
+/**
+ * Deprecated use FUZZYAI instead.
+ *
+ * @customfunction
+ */
+function FUZZIFY(input) {
+  return FUZZYAI.apply(this, arguments);
+}
+
+// onInstall function
+function onInstall(e) {
+  onOpen(e);
+}
+
 // Add custom menu option
-function onOpen() {
+function onOpen(e) {
   SpreadsheetApp.getUi()
-      .createMenu('Fuzzy.ai')
+      .createAddonMenu()
       .addItem('Settings', 'showSettingsDialog')
       .addToUi();
 }
